@@ -163,7 +163,7 @@ namespace Tyuiu.ChuginNM.Sprint6.Task6.V12
             Controls.Add(questionGroupBox_CNM);
             Controls.Add(controlBox_CNM);
             Name = "FormMain";
-            Text = "Form1";
+            Text = "Спринт 6 | Таск 6 | Вариант 12 | Чугин Н. М.";
             controlBox_CNM.ResumeLayout(false);
             questionGroupBox_CNM.ResumeLayout(false);
             questionGroupBox_CNM.PerformLayout();

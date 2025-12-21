@@ -21,7 +21,7 @@ namespace Tyuiu.ChuginNM.Sprint6.Task6.V12.Lib
             var wordsWithW = matches
                 .Cast<Match>()
                 .Select(m => m.Value)
-                .Where(word => word.IndexOf('w', StringComparison.OrdinalIgnoreCase) >= 0);
+                .Where(word => word.IndexOf('w', StringComparison.Ordinal) >= 0);
 
             // Собираем результат в строку
             return string.Join(" ", wordsWithW);
