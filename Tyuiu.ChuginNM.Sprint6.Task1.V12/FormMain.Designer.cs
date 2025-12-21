@@ -184,6 +184,7 @@ namespace Tyuiu.ChuginNM.Sprint6.Task1.V12
             Controls.Add(groupBoxResult_CNM);
             Controls.Add(ButtonResult_CNM);
             Controls.Add(groupBoxTask_CNM);
+            Text = "Спринт 6 | Таск 1 | Вариант 12 | Чугин Н. М.";
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "FormMain";

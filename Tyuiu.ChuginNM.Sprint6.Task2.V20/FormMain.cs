@@ -26,7 +26,7 @@ namespace Tyuiu.ChuginNM.Sprint6.Task2.V20
 
         private void buttonHelp_CNM_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Таск 2 выполнила студентка группы ИИПб-23-1 Пьянзина Мария Алексеевна", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Таск 2 выполнил студент группы АСОиУб-25-1 Чугин Никита", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void buttonDone_Click(object sender, EventArgs e)
