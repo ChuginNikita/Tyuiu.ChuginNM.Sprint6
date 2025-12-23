@@ -110,6 +110,21 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13.Lib
                 }
             }
 
+            int targetColumn = 5;
+
+            if (targetColumn <= maxColumns)
+            {
+                for (int i = 0; i < rowCount; i++)
+                {
+                    int value = result[i, targetColumn];
+
+                    if (value > 0 && value % 2 == 0)
+                    {
+                        result[i, targetColumn] = 111;
+                    }
+                }
+            }
+
             return result;
         }
 
