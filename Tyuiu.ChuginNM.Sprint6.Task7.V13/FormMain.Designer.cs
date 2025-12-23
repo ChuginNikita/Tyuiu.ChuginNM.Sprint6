@@ -1,4 +1,6 @@
-﻿using Tyuiu.ChuginNM.Sprint6.Task7.V13.Lib;
+﻿using System.Text;
+using System.Windows.Forms;
+using Tyuiu.ChuginNM.Sprint6.Task7.V13.Lib;
 
 namespace Tyuiu.ChuginNM.Sprint6.Task7.V13
 {
@@ -148,65 +150,41 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13
 
         private void ButtonSave_CNM_Click(object sender, EventArgs e)
         {
-            string savePath = string.Empty;
-
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
-                saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
-                saveFileDialog.FilterIndex = 1;
-                saveFileDialog.RestoreDirectory = true;
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                using (SaveFileDialog sfd = new SaveFileDialog())
                 {
-                    savePath = saveFileDialog.FileName;
-                }
-            }
+                    sfd.Filter = "CSV (*.csv)|*.csv|Текстовые файлы (*.txt)|*.txt";
+                    sfd.FilterIndex = 1;
 
-            try
-            {
-                System.IO.StreamWriter csvFileWriter = new StreamWriter(savePath, false);
-
-                string columnHeaderText = "";
-
-                int countColumn = dataGridViewOutput_CNM.ColumnCount - 1;
-
-                if (countColumn >= 0)
-                {
-                    columnHeaderText = dataGridViewOutput_CNM.Columns[0].HeaderText;
-                }
-
-                for (int i = 1; i <= countColumn; i++)
-                {
-                    columnHeaderText = columnHeaderText + ',' + dataGridViewOutput_CNM.Columns[i].HeaderText;
-                }
-
-
-                csvFileWriter.WriteLine(columnHeaderText);
-
-                foreach (DataGridViewRow dataRowObject in dataGridViewOutput_CNM.Rows)
-                {
-                    if (!dataRowObject.IsNewRow)
+                    if (sfd.ShowDialog() == DialogResult.OK)
                     {
-                        string dataFromGrid = "";
-
-                        dataFromGrid = dataRowObject.Cells[0].Value.ToString();
-
-                        for (int i = 1; i <= countColumn; i++)
+                        try
                         {
-                            dataFromGrid = dataFromGrid + ',' + dataRowObject.Cells[i].Value.ToString();
+                            using (StreamWriter sw = new StreamWriter(sfd.FileName, false, Encoding.UTF8))
+                            {
+                                for (int i = 0; i < dataGridViewOutput_CNM.Rows.Count; i++)
+                                {
+                                    if (dataGridViewOutput_CNM.Rows[i].IsNewRow) continue;
 
-                            csvFileWriter.WriteLine(dataFromGrid);
+                                    List<string> values = new List<string>();
+                                    for (int j = 0; j < dataGridViewOutput_CNM.Columns.Count; j++)
+                                    {
+                                        string val = dataGridViewOutput_CNM.Rows[i].Cells[j].Value?.ToString() ?? "";
+                                        if (val.Contains(",") || val.Contains("\"") || val.Contains("\n"))
+                                            val = "\"" + val.Replace("\"", "\"\"") + "\"";
+                                        values.Add(val);
+                                    }
+                                    sw.WriteLine(string.Join(",", values));
+                                }
+                            }
+                            MessageBox.Show("Сохранено успешно!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
-
-
-                csvFileWriter.Flush();
-                csvFileWriter.Close();
-            }
-            catch (Exception exceptionObject)
-            {
-                MessageBox.Show(exceptionObject.ToString());
             }
         }
 
