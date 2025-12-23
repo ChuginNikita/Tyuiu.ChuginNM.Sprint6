@@ -13,8 +13,7 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13.Lib
                 return null;
             }
 
-            List<string[]> rows = new List<string[]>();
-            int maxColumns = 0;
+            List<List<int>> rows = new List<List<int>>();
             using (StreamReader reader = new StreamReader(path))
             {
                 string line;
@@ -27,12 +26,50 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13.Lib
                     if (string.IsNullOrWhiteSpace(line))
                         continue;
 
-                    string[] elements = line.Split(',');
+                    List<int> currentRow = new List<int>();
+                    string[] cells = line.Split(',');
 
-                    if (elements.Length > maxColumns)
-                        maxColumns = elements.Length;
+                    foreach (string cell in cells)
+                    {
+                        string trimmedCell = cell.Trim();
 
-                    rows.Add(elements);
+                        // Проверяем, содержит ли ячейка несколько значений
+                        if (trimmedCell.Contains(";"))
+                        {
+                            string[] values = trimmedCell.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+                            foreach (string value in values)
+                            {
+                                string trimmedValue = value.Trim();
+                                if (int.TryParse(trimmedValue, out int parsedValue))
+                                {
+                                    currentRow.Add(parsedValue);
+                                }
+                                else
+                                {
+                                    throw new FormatException($"Некорректное значение '{trimmedValue}' в строке {lineNumber}. Ожидается целое число.");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Одиночное значение
+                            if (string.IsNullOrWhiteSpace(trimmedCell))
+                            {
+                                currentRow.Add(0); // Пустая ячейка становится 0
+                            }
+                            else if (int.TryParse(trimmedCell, out int parsedValue))
+                            {
+                                currentRow.Add(parsedValue);
+                            }
+                            else
+                            {
+                                throw new FormatException($"Некорректное значение '{trimmedCell}' в строке {lineNumber}. Ожидается целое число.");
+                            }
+                        }
+                    }
+
+                    rows.Add(currentRow);
                 }
 
                 if (rows.Count == 0)
@@ -41,35 +78,38 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13.Lib
                 }
             }
 
+            // Определяем размеры результирующей матрицы
             int rowCount = rows.Count;
+            int maxColumns = 0;
+
+            foreach (var row in rows)
+            {
+                if (row.Count > maxColumns)
+                {
+                    maxColumns = row.Count;
+                }
+            }
+
+            // Создаем и заполняем результирующую матрицу
             int[,] result = new int[rowCount, maxColumns];
 
             for (int i = 0; i < rowCount; i++)
             {
-                string[] elements = rows[i];
+                List<int> currentRow = rows[i];
 
                 for (int j = 0; j < maxColumns; j++)
                 {
-                    if (j < elements.Length)
+                    if (j < currentRow.Count)
                     {
-                        string element = elements[j].Trim();
-                        if (int.TryParse(element, out int value))
-                        {
-                            result[i, j] = value;
-                        }
-                        else
-                        {
-                            throw new FormatException($"Некорректное значение '{element}' в строке {i + 1}, столбце {j + 1}. Ожидается целое число.");
-                        }
+                        result[i, j] = currentRow[j];
                     }
                     else
                     {
-                        result[i, j] = 0; 
+                        result[i, j] = 0; // Заполняем оставшиеся ячейки нулями
                     }
                 }
             }
 
-            
             return result;
         }
 

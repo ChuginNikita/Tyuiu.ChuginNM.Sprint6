@@ -40,6 +40,7 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13
             groupQuestionBox_CNM = new GroupBox();
             dataGridViewInput_CNM = new DataGridView();
             dataGridViewOutput_CNM = new DataGridView();
+            buttonSave_CNM = new Button();
             groupControlBox_CNM.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewInput_CNM).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewOutput_CNM).BeginInit();
@@ -48,6 +49,7 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13
             // groupControlBox_CNM
             // 
             groupControlBox_CNM.AutoSize = true;
+            groupControlBox_CNM.Controls.Add(buttonSave_CNM);
             groupControlBox_CNM.Controls.Add(buttonHelp_CNM);
             groupControlBox_CNM.Controls.Add(buttonOpen_CNM);
             groupControlBox_CNM.Controls.Add(buttonRun_CNM);
@@ -80,13 +82,14 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13
             // 
             // buttonRun_CNM
             // 
-            buttonRun_CNM.Location = new Point(76, 22);
+            buttonRun_CNM.Location = new Point(146, 22);
             buttonRun_CNM.Name = "buttonRun_CNM";
             buttonRun_CNM.Size = new Size(64, 58);
             buttonRun_CNM.TabIndex = 0;
             buttonRun_CNM.Text = "RUN";
             buttonRun_CNM.UseVisualStyleBackColor = true;
             buttonRun_CNM.Click += ButtonRun_CNM_Click;
+            buttonRun_CNM.Enabled = false;
             // 
             // groupQuestionBox_CNM
             // 
@@ -114,6 +117,17 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13
             dataGridViewOutput_CNM.Size = new Size(450, 386);
             dataGridViewOutput_CNM.TabIndex = 3;
             // 
+            // buttonSave_CNM
+            // 
+            buttonSave_CNM.Location = new Point(76, 22);
+            buttonSave_CNM.Name = "buttonSave_CNM";
+            buttonSave_CNM.Size = new Size(64, 58);
+            buttonSave_CNM.TabIndex = 3;
+            buttonSave_CNM.Text = "SAVE";
+            buttonSave_CNM.UseVisualStyleBackColor = true;
+            buttonSave_CNM.Click += ButtonSave_CNM_Click;
+            buttonSave_CNM.Enabled = false;
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -130,6 +144,70 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13
             ((System.ComponentModel.ISupportInitialize)dataGridViewOutput_CNM).EndInit();
             ResumeLayout(false);
             PerformLayout();
+        }
+
+        private void ButtonSave_CNM_Click(object sender, EventArgs e)
+        {
+            string savePath = string.Empty;
+
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+                saveFileDialog.FilterIndex = 1;
+                saveFileDialog.RestoreDirectory = true;
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    savePath = saveFileDialog.FileName;
+                }
+            }
+
+            try
+            {
+                System.IO.StreamWriter csvFileWriter = new StreamWriter(savePath, false);
+
+                string columnHeaderText = "";
+
+                int countColumn = dataGridViewOutput_CNM.ColumnCount - 1;
+
+                if (countColumn >= 0)
+                {
+                    columnHeaderText = dataGridViewOutput_CNM.Columns[0].HeaderText;
+                }
+
+                for (int i = 1; i <= countColumn; i++)
+                {
+                    columnHeaderText = columnHeaderText + ',' + dataGridViewOutput_CNM.Columns[i].HeaderText;
+                }
+
+
+                csvFileWriter.WriteLine(columnHeaderText);
+
+                foreach (DataGridViewRow dataRowObject in dataGridViewOutput_CNM.Rows)
+                {
+                    if (!dataRowObject.IsNewRow)
+                    {
+                        string dataFromGrid = "";
+
+                        dataFromGrid = dataRowObject.Cells[0].Value.ToString();
+
+                        for (int i = 1; i <= countColumn; i++)
+                        {
+                            dataFromGrid = dataFromGrid + ',' + dataRowObject.Cells[i].Value.ToString();
+
+                            csvFileWriter.WriteLine(dataFromGrid);
+                        }
+                    }
+                }
+
+
+                csvFileWriter.Flush();
+                csvFileWriter.Close();
+            }
+            catch (Exception exceptionObject)
+            {
+                MessageBox.Show(exceptionObject.ToString());
+            }
         }
 
         private void buttonHelp_CNM_Click(object sender, EventArgs e)
@@ -151,12 +229,15 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13
                     //Get the path of specified file
                     path = openFileDialog.FileName;
                     MessageBox.Show("Выбран файл: " + path.ToString());
+                    buttonSave_CNM.Enabled = false;
                 }
+
             }
 
             if (path == "")
             {
                 buttonRun_CNM.Enabled = false;
+                buttonSave_CNM.Enabled = false;
             }
             else { buttonRun_CNM.Enabled = true; }
 
@@ -230,6 +311,7 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13
                 throw new Exception("Таблица загружена неправильно");
             }
             DisplayArrayInDataGridView(result, dataGridViewOutput_CNM);
+            buttonSave_CNM.Enabled = true;
 
         }
 
@@ -242,5 +324,6 @@ namespace Tyuiu.ChuginNM.Sprint6.Task7.V13
         private Button buttonRun_CNM;
         private Button buttonOpen_CNM;
         private Button buttonHelp_CNM;
+        private Button buttonSave_CNM;
     }
 }
