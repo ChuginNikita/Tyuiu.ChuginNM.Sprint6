@@ -43,8 +43,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Task6", "Task6", "{A579EDF1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Task7", "Task7", "{FE78F48E-C38C-4330-B29D-5AC365994834}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Review", "Review", "{8D0C7EDA-4DBB-49AA-AA7E-9F3E80374EF1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tyuiu.ChuginNM.Sprint6.Task4.V1.Lib", "Tyuiu.ChuginNM.Sprint6.Task4.V1.Lib\Tyuiu.ChuginNM.Sprint6.Task4.V1.Lib.csproj", "{7B7ADDDE-1F0D-443E-9D20-DD485157CBE9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tyuiu.ChuginNM.Sprint6.Task4.V1.Test", "Tyuiu.ChuginNM.Sprint6.Task4.V1.Test\Tyuiu.ChuginNM.Sprint6.Task4.V1.Test.csproj", "{CF96CF92-7DD1-452E-B204-09F5034457E2}"
